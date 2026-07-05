@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#FFFFFF">
+<title>First Light — Couch to 5K</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:light;
+    --ink:#2A2724;
+    --muted:#8A837D;
+    --bg:#FFFFFF;
+    --paper:#FFFFFF;
+    --pink:#F3D8D9;
+    --pink-mid:#E0A8AA;
+    --pink-deep:#A5646A;
+    --stone:#C9C3BD;
+    --stone-deep:#7A736D;
+    --stone-tint:rgba(122,115,109,0.08);
+    --line:#EEEBE8;
+    --line-strong:#DDD8D3;
+    --shadow:0 10px 26px rgba(40,35,30,0.05), 0 2px 6px rgba(40,35,30,0.04);
+  }
+  *{box-sizing:border-box;}
+  html{ background:#FFFFFF; }
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:40px;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono',monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  a{color:inherit;}
+  button{
+    font-family:inherit;
+    cursor:pointer;
+    border:none;
+    background:none;
+    color:inherit;
+  }
+  button:focus-visible, .tab:focus-visible{
+    outline:2.5px solid var(--pink-mid);
+    outline-offset:2px;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero{
+    background:var(--bg);
+    padding:36px 20px 20px;
+    position:relative;
+  }
+  .hero-eyebrow{
+    font-size:11.5px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin:0 0 14px;
+    font-weight:600;
+  }
+  .hero-rule{
+    width:34px;
+    height:2px;
+    background:var(--pink-mid);
+    margin:0 0 14px;
+  }
+  .hero-title{
+    font-size:29px;
+    margin:0;
+    color:var(--ink);
+  }
+  .hero-sub{
+    font-size:13.5px;
+    color:var(--muted);
+    margin:7px 0 0;
+  }
+
+  /* ---------- Tabs ---------- */
+  nav.tabs{
+    display:flex;
+    gap:26px;
+    max-width:560px;
+    margin:22px auto 0;
+    padding:0 20px;
+    background:var(--bg);
+  }
+  .tab{
+    padding:0 0 12px;
+    text-align:center;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:0.02em;
+    color:var(--stone);
+    border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease, font-weight .15s ease;
+  }
+  .tab.active{
+    color:var(--ink);
+    font-weight:600;
+    border-bottom-color:var(--pink-mid);
+  }
+
+  main{
+    max-width:560px;
+    margin:0 auto;
+    padding:22px 20px 0;
+    background:var(--bg);
+  }
+
+  .card{
+    background:var(--paper);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    margin-bottom:16px;
+  }
+
+  /* ---------- Today: ready state ---------- */
+  .session-tag{
+    font-size:11.5px;
+    color:var(--pink-deep);
+    font-weight:700;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin:0 0 6px;
+  }
+  .session-title{
+    font-size:23px;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .session-summary{
+    font-size:14.5px;
+    color:var(--muted);
+    line-height:1.55;
+    margin:0 0 18px;
+  }
+  .phase-chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-bottom:20px;
+  }
+  .chip{
+    font-size:12px;
+    padding:6px 11px;
+    border-radius:100px;
+    border:1px solid var(--line);
+    color:var(--muted);
+    white-space:nowrap;
+    font-weight:500;
+  }
+  .chip.run{ border-color:rgba(165,100,106,0.28); color:var(--pink-deep); background:var(--pink);}
+  .chip.walk{ border-color:rgba(122,115,109,0.25); color:var(--stone-deep); background:var(--stone-tint);}
+
+  .btn-primary{
+    width:100%;
+    padding:16px;
+    background:var(--ink);
+    color:#fff;
+    border-radius:12px;
+    font-size:14.5px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    transition:opacity .15s ease;
+  }
+  .btn-primary:hover{ opacity:0.88; }
+  .btn-secondary{
+    width:100%;
+    padding:14px;
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--line-strong);
+    border-radius:12px;
+    font-size:14px;
+    font-weight:600;
+  }
+
+  .progress-line{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12.5px;
+    color:var(--muted);
+    margin-bottom:12px;
+  }
+  .progress-track{
+    flex:1;
+    height:3px;
+    background:var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--pink-mid);
+    border-radius:4px;
+  }
+
+  /* ---------- Timer (active state) ---------- */
+  .timer-wrap{
+    text-align:center;
+    padding:8px 0 4px;
+  }
+  .phase-name{
+    font-size:14.5px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    margin-bottom:8px;
+  }
+  .phase-name.run{ color:var(--pink-deep); }
+  .phase-name.walk, .phase-name.warmup, .phase-name.cooldown{ color:var(--stone-deep); }
+
+  .timer-ring-wrap{
+    position:relative;
+    width:220px;
+    height:220px;
+    margin:10px auto 20px;
+  }
+  .timer-ring-wrap svg{ transform:rotate(-90deg); }
+  .ring-bg{ fill:none; stroke:var(--line); stroke-width:8; }
+  .ring-fg{ fill:none; stroke-width:8; stroke-linecap:round; transition:stroke-dashoffset 1s linear; }
+  .ring-fg.run{ stroke:var(--pink-mid); }
+  .ring-fg.walk, .ring-fg.warmup, .ring-fg.cooldown{ stroke:var(--stone); }
+  .timer-center{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .timer-count{
+    font-size:44px;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .timer-next{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:5px;
+  }
+  .timer-controls{
+    display:flex;
+    gap:10px;
+    margin-top:8px;
+  }
+  .interval-progress{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:4px;
+    letter-spacing:0.02em;
+  }
+
+  /* ---------- Completion ---------- */
+  .feel-row{
+    display:flex;
+    gap:8px;
+    margin:16px 0 18px;
+  }
+  .feel-btn{
+    flex:1;
+    padding:12px 4px;
+    border:1.5px solid var(--line-strong);
+    border-radius:12px;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--muted);
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .feel-btn.selected{
+    border-color:var(--pink-mid);
+    color:var(--pink-deep);
+    background:var(--pink);
+  }
+
+  /* ---------- Plan view ---------- */
+  .horizon-wrap{
+    padding:2px 0 2px;
+  }
+  .week-block{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px 18px;
+    box-shadow:var(--shadow);
+    margin-bottom:14px;
+  }
+  .week-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .week-head h3{
+    font-size:15.5px;
+    margin:0;
+    color:var(--ink);
+  }
+  .week-head span{
+    font-size:11.5px;
+    color:var(--muted);
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+  }
+  .day-row{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:11px 0;
+    border-top:1px solid var(--line);
+  }
+  .day-row:first-of-type{ border-top:none; }
+  .day-dot{
+    width:20px; height:20px;
+    border-radius:50%;
+    border:2px solid var(--line-strong);
+    flex-shrink:0;
+    margin-top:1px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .day-dot.done{ background:var(--stone-deep); border-color:var(--stone-deep); }
+  .day-dot.done::after{ content:"✓"; color:#fff; font-size:11px; font-weight:700; }
+  .day-dot.next{ border-color:var(--pink-mid); }
+  .day-text b{ font-size:13.5px; display:block; color:var(--ink); font-weight:600; }
+  .day-text span{ font-size:12.5px; color:var(--muted); }
+
+  /* ---------- History ---------- */
+  .hist-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:13px 0;
+    border-top:1px solid var(--line);
+  }
+  .hist-row:first-of-type{ border-top:none; }
+  .hist-left b{ font-size:14px; display:block; color:var(--ink); }
+  .hist-left span{ font-size:12px; color:var(--muted); }
+  .hist-right{ text-align:right; }
+  .hist-right .dur{ font-size:14px; font-weight:600; color:var(--ink); }
+  .hist-right .feel{ font-size:11.5px; color:var(--muted); }
+  .empty-note{
+    font-size:13.5px;
+    color:var(--muted);
+    text-align:center;
+    padding:20px 0;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ring-fg{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="hero-eyebrow">First Light · Couch to 5K</p>
+  <div class="hero-rule"></div>
+  <h1 class="hero-title" id="heroTitle">Good morning</h1>
+  <p class="hero-sub" id="heroSub">Nine weeks. Three runs a week. One step at a time.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="today">Today</button>
+  <button class="tab" data-tab="plan">Plan</button>
+  <button class="tab" data-tab="history">History</button>
+</nav>
+
+<main>
+  <section id="view-today"></section>
+  <section id="view-plan" style="display:none;"></section>
+  <section id="view-history" style="display:none;"></section>
+</main>
+
+<script>
+/* ============ Program data ============ */
+function W(sec){ return {type:'warmup', sec, label:'Warm up — brisk walk'}; }
+function R(sec){ return {type:'run', sec, label:'Run'}; }
+function K(sec){ return {type:'walk', sec, label:'Walk'}; }
+function C(sec){ return {type:'cooldown', sec, label:'Cool down — walk'}; }
+function rep(n, arr){
+  var out = [];
+  for (var i=0;i<n;i++){ arr.forEach(function(x){ out.push(Object.assign({}, x)); }); }
+  return out;
+}
+
+var P1  = [W(300)].concat(rep(8,[R(60),K(90)])).concat([C(300)]);
+var P1B = [W(300)].concat(rep(4,[R(120),K(180)])).concat([C(300)]);
+var P1C = [W(300)].concat(rep(16,[R(30),K(45)])).concat([C(300)]);
+
+var P2  = [W(300)].concat(rep(6,[R(90),K(120)])).concat([C(300)]);
+var P2B = [W(300)].concat(rep(3,[R(180),K(240)])).concat([C(300)]);
+var P2C = [W(300)].concat(rep(9,[R(60),K(80)])).concat([C(300)]);
+
+var P3  = [W(300)].concat(rep(2,[R(90),K(90),R(180),K(180)])).concat([C(300)]);
+var P3B = [W(300)].concat(rep(3,[R(60),K(60),R(120),K(120)])).concat([C(300)]);
+var P3C = [W(300), R(180),K(180),R(360),K(360), C(300)];
+
+var P4  = [W(300), R(180),K(90),R(300),K(150),R(180),K(90),R(300), C(300)];
+var P4B = [W(300), R(300),K(90),R(180),K(150),R(300),K(90),R(180), C(300)];
+var P4C = [W(300), R(240),K(90),R(240),K(150),R(240),K(90),R(240), C(300)];
+var P5A = [W(300), R(300),K(180),R(300),K(180),R(300), C(300)];
+var P5B = [W(300), R(480),K(300),R(480), C(300)];
+var P5C = [W(300), R(1200), C(300)];
+var P6A = [W(300), R(300),K(180),R(480),K(180),R(300), C(300)];
+var P6B = [W(300), R(600),K(180),R(600), C(300)];
+var P6C = [W(300), R(1500), C(300)];
+var P7 = [W(300), R(1500), C(300)];
+var P8 = [W(300), R(1680), C(300)];
+var P9 = [W(300), R(1800), C(300)];
+
+var WEEKS = [
+  {week:1, pattern:[P1,P1B,P1C],
+    dayBlurbs:[
+      "8 × (run 1 min / walk 90 sec) — short, frequent bursts",
+      "4 × (run 2 min / walk 3 min) — fewer, longer runs, same total",
+      "16 × (run 30 sec / walk 45 sec) — quick rhythm, same total running"
+    ]},
+  {week:2, pattern:[P2,P2B,P2C],
+    dayBlurbs:[
+      "6 × (run 90 sec / walk 2 min)",
+      "3 × (run 3 min / walk 4 min) — longer runs, same total",
+      "9 × (run 1 min / walk 80 sec) — shorter and more frequent"
+    ]},
+  {week:3, pattern:[P3,P3B,P3C],
+    dayBlurbs:[
+      "2 rounds: run 90s/walk 90s, then run 3min/walk 3min",
+      "3 rounds: run 1min/walk 1min, then run 2min/walk 2min",
+      "1 big round: run 3min/walk 3min, then run 6min/walk 6min"
+    ]},
+  {week:4, pattern:[P4,P4B,P4C],
+    dayBlurbs:[
+      "Run 3, walk 1.5, run 5, walk 2.5, run 3, walk 1.5, run 5 (min)",
+      "Run 5, walk 1.5, run 3, walk 2.5, run 5, walk 1.5, run 3 (min) — same runs, reordered",
+      "Four even 4-minute runs, same walk breaks as before"
+    ]},
+  {week:5, pattern:[P5A,P5B,P5C],
+    dayBlurbs:["Run 5, walk 3, run 5, walk 3, run 5 (min)","Run 8 min, walk 5 min, run 8 min","Run 20 minutes, no walking — first continuous run"]},
+  {week:6, pattern:[P6A,P6B,P6C],
+    dayBlurbs:["Run 5, walk 3, run 8, walk 3, run 5 (min)","Run 10 min, walk 3 min, run 10 min","Run 25 minutes straight"]},
+  {week:7, pattern:[P7,P7,P7],
+    dayBlurbs:[
+      "Run 25 minutes at a steady, conversational pace",
+      "Run 25 minutes — start easy, pick it up in the second half",
+      "Run 25 minutes somewhere new if you can — change of scenery"
+    ]},
+  {week:8, pattern:[P8,P8,P8],
+    dayBlurbs:[
+      "Run 28 minutes at a steady pace",
+      "Run 28 minutes — relaxed shoulders, easy breathing",
+      "Run 28 minutes by feel — skip checking the clock"
+    ]},
+  {week:9, pattern:[P9,P9,P9],
+    dayBlurbs:[
+      "Run 30 minutes — the full 5K distance",
+      "Run 30 minutes at whatever pace feels sustainable",
+      "Run 30 minutes — the one you've been building toward"
+    ]}
+];
+
+var SESSIONS = [];
+WEEKS.forEach(function(w){
+  w.pattern.forEach(function(intervals, dayIdx){
+    var total = intervals.reduce(function(a,b){return a+b.sec;},0);
+    SESSIONS.push({
+      week: w.week,
+      day: dayIdx+1,
+      intervals: intervals,
+      totalSec: total,
+      blurb: w.dayBlurbs[dayIdx]
+    });
+  });
+});
+
+/* ============ Storage ============ */
+var STORE_KEY = 'first_light_c25k_v1';
+function loadProgress(){
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return {done:[]};
+    var parsed = JSON.parse(raw);
+    if(!parsed.done) parsed.done = [];
+    return parsed;
+  }catch(e){ return {done:[]}; }
+}
+function saveProgress(p){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(p)); }catch(e){}
+}
+var progress = loadProgress();
+
+function nextSessionIndex(){
+  return Math.min(progress.done.length, SESSIONS.length - 1);
+}
+function isSessionDone(idx){
+  return progress.done.some(function(d){ return d.idx===idx; });
+}
+
+/* ============ Helpers ============ */
+function fmtClock(sec){
+  var m = Math.floor(sec/60), s = sec%60;
+  return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+}
+function fmtMin(sec){
+  var m = Math.round(sec/60);
+  return m + ' min';
+}
+function phaseLabelClass(type){ return type; }
+function reduceMotion(){
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/* ============ Audio / haptics ============ */
+var audioCtx = null;
+function beep(freq, dur){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.frequency.value = freq;
+    o.type = 'sine';
+    g.gain.value = 0.15;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    o.stop(audioCtx.currentTime + dur);
+  }catch(e){}
+}
+function haptic(ms){
+  try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){}
+}
+function announcePhase(type){
+  if(type==='run'){ beep(880,0.35); haptic([120,60,120]); }
+  else { beep(440,0.35); haptic(150); }
+}
+
+/* ============ Tabs ============ */
+var tabs = document.querySelectorAll('.tab');
+var views = {
+  today: document.getElementById('view-today'),
+  plan: document.getElementById('view-plan'),
+  history: document.getElementById('view-history')
+};
+tabs.forEach(function(t){
+  t.addEventListener('click', function(){
+    tabs.forEach(function(x){ x.classList.remove('active'); });
+    t.classList.add('active');
+    Object.keys(views).forEach(function(k){ views[k].style.display = 'none'; });
+    views[t.dataset.tab].style.display = 'block';
+    if(t.dataset.tab==='plan') renderPlan();
+    if(t.dataset.tab==='history') renderHistory();
+    if(t.dataset.tab==='today') renderToday();
+  });
+});
+
+/* ============ Hero ============ */
+function renderHero(){
+  var idx = nextSessionIndex();
+  var done = progress.done.length;
+  if(done >= SESSIONS.length){
+    document.getElementById('heroTitle').textContent = "You're a runner";
+    document.getElementById('heroSub').textContent = "All nine weeks complete. That's a 5K.";
+  } else {
+    var s = SESSIONS[idx];
+    document.getElementById('heroTitle').textContent = 'Week ' + s.week + ', Day ' + s.day;
+    document.getElementById('heroSub').textContent = (SESSIONS.length - done) + ' sessions to go';
+  }
+}
+
+/* ============ Today view — state machine ============ */
+var timerState = null; // {sessionIdx, phaseIdx, secLeft, running, handle, elapsed}
+
+function renderToday(){
+  renderHero();
+  if(timerState && timerState.mode==='active'){
+    renderTimerActive();
+  } else if(timerState && timerState.mode==='done'){
+    renderComplete();
+  } else {
+    renderReady();
+  }
+}
+
+function renderReady(){
+  var idx = nextSessionIndex();
+  if(idx >= SESSIONS.length && progress.done.length >= SESSIONS.length){
+    views.today.innerHTML =
+      '<div class="card">'+
+      '<p class="session-tag">Programme complete</p>'+
+      '<h2 class="session-title">Nine weeks, done</h2>'+
+      '<p class="session-summary">Every session on the plan is logged. Check History any time you want to look back on it.</p>'+
+      '</div>';
+    return;
+  }
+  var s = SESSIONS[idx];
+  var pctDone = Math.round((progress.done.length / SESSIONS.length) * 100);
+
+  var chips = s.intervals.map(function(iv){
+    var cls = iv.type==='run' ? 'run' : (iv.type==='walk' ? 'walk' : '');
+    return '<span class="chip '+cls+'">'+iv.label+' '+fmtClock(iv.sec)+'</span>';
+  }).join('');
+
+  views.today.innerHTML =
+    '<div class="progress-line">'+
+      '<span>'+progress.done.length+' of '+SESSIONS.length+' sessions</span>'+
+      '<span class="progress-track"><span class="progress-fill" style="width:'+pctDone+'%"></span></span>'+
+    '</div>'+
+    '<div class="card">'+
+      '<p class="session-tag">Week '+s.week+' · Day '+s.day+' of 3</p>'+
+      '<h2 class="session-title">'+fmtMin(s.totalSec)+' total</h2>'+
+      '<p class="session-summary">'+s.blurb+'</p>'+
+      '<div class="phase-chips">'+chips+'</div>'+
+      '<button class="btn-primary" id="startBtn">Start session</button>'+
+    '</div>';
+
+  document.getElementById('startBtn').addEventListener('click', function(){
+    startSession(idx);
+  });
+}
+
+function startSession(idx){
+  var s = SESSIONS[idx];
+  timerState = {
+    mode:'active',
+    sessionIdx: idx,
+    phaseIdx: 0,
+    secLeft: s.intervals[0].sec,
+    running: true,
+    elapsed: 0
+  };
+  announcePhase(s.intervals[0].type);
+  tickLoop();
+  renderToday();
+}
+
+function tickLoop(){
+  clearInterval(timerState.handle);
+  timerState.handle = setInterval(function(){
+    if(!timerState || !timerState.running) return;
+    timerState.secLeft -= 1;
+    timerState.elapsed += 1;
+    if(timerState.secLeft <= 0){
+      var s = SESSIONS[timerState.sessionIdx];
+      timerState.phaseIdx += 1;
+      if(timerState.phaseIdx >= s.intervals.length){
+        clearInterval(timerState.handle);
+        timerState.mode = 'done';
+        beep(660,0.5);
+        haptic([150,80,150,80,150]);
+        renderToday();
+        return;
+      }
+      timerState.secLeft = s.intervals[timerState.phaseIdx].sec;
+      announcePhase(s.intervals[timerState.phaseIdx].type);
+    }
+    updateTimerDOM();
+  }, 1000);
+}
+
+function renderTimerActive(){
+  var s = SESSIONS[timerState.sessionIdx];
+  var iv = s.intervals[timerState.phaseIdx];
+  var nextIv = s.intervals[timerState.phaseIdx+1];
+  var circumference = 2*Math.PI*95;
+
+  views.today.innerHTML =
+    '<div class="card timer-wrap">'+
+      '<p class="interval-progress">Interval '+(timerState.phaseIdx+1)+' of '+s.intervals.length+' · Week '+s.week+' Day '+s.day+'</p>'+
+      '<p class="phase-name '+phaseLabelClass(iv.type)+'" id="phaseName">'+iv.label+'</p>'+
+      '<div class="timer-ring-wrap">'+
+        '<svg width="220" height="220" viewBox="0 0 220 220">'+
+          '<circle class="ring-bg" cx="110" cy="110" r="95"></circle>'+
+          '<circle class="ring-fg '+phaseLabelClass(iv.type)+'" id="ringFg" cx="110" cy="110" r="95" '+
+            'stroke-dasharray="'+circumference+'" stroke-dashoffset="0"></circle>'+
+        '</svg>'+
+        '<div class="timer-center">'+
+          '<span class="timer-count mono" id="timerCount">'+fmtClock(timerState.secLeft)+'</span>'+
+          '<span class="timer-next" id="timerNext">'+(nextIv ? 'Next: '+nextIv.label : 'Final phase')+'</span>'+
+        '</div>'+
+      '</div>'+
+      '<div class="timer-controls">'+
+        '<button class="btn-secondary" id="pauseBtn">'+(timerState.running?'Pause':'Resume')+'</button>'+
+        '<button class="btn-secondary" id="stopBtn">End early</button>'+
+      '</div>'+
+    '</div>';
+
+  updateTimerDOM();
+
+  document.getElementById('pauseBtn').addEventListener('click', function(){
+    timerState.running = !timerState.running;
+    renderTimerActive();
+  });
+  document.getElementById('stopBtn').addEventListener('click', function(){
+    clearInterval(timerState.handle);
+    timerState = null;
+    renderToday();
+  });
+}
+
+function updateTimerDOM(){
+  if(!timerState) return;
+  var s = SESSIONS[timerState.sessionIdx];
+  var iv = s.intervals[timerState.phaseIdx];
+  var countEl = document.getElementById('timerCount');
+  var ringEl = document.getElementById('ringFg');
+  if(!countEl || !ringEl) return;
+  countEl.textContent = fmtClock(timerState.secLeft);
+  var circumference = 2*Math.PI*95;
+  var frac = timerState.secLeft / iv.sec;
+  ringEl.style.strokeDashoffset = (reduceMotion() ? circumference*(1-frac) : circumference*(1-frac));
+}
+
+var selectedFeel = null;
+function renderComplete(){
+  var s = SESSIONS[timerState.sessionIdx];
+  views.today.innerHTML =
+    '<div class="card">'+
+      '<p class="session-tag">Session complete</p>'+
+      '<h2 class="session-title">Week '+s.week+', Day '+s.day+' done</h2>'+
+      '<p class="session-summary">'+fmtMin(timerState.elapsed)+' on your feet. How did it feel?</p>'+
+      '<div class="feel-row">'+
+        '<button class="feel-btn" data-feel="Tough">Tough</button>'+
+        '<button class="feel-btn" data-feel="OK">OK</button>'+
+        '<button class="feel-btn" data-feel="Great">Great</button>'+
+      '</div>'+
+      '<button class="btn-primary" id="saveSessionBtn">Save session</button>'+
+    '</div>';
+
+  document.querySelectorAll('.feel-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      selectedFeel = b.dataset.feel;
+      document.querySelectorAll('.feel-btn').forEach(function(x){ x.classList.remove('selected'); });
+      b.classList.add('selected');
+    });
+  });
+  document.getElementById('saveSessionBtn').addEventListener('click', function(){
+    progress.done.push({
+      idx: timerState.sessionIdx,
+      date: new Date().toISOString(),
+      feeling: selectedFeel || 'OK',
+      durationSec: timerState.elapsed
+    });
+    saveProgress(progress);
+    selectedFeel = null;
+    timerState = null;
+    renderToday();
+  });
+}
+
+/* ============ Plan view ============ */
+function renderPlan(){
+  var html = '<div class="horizon-wrap">';
+  WEEKS.forEach(function(w){
+    html += '<div class="week-block"><div class="week-head"><h3>Week '+w.week+'</h3><span>3 sessions</span></div>';
+    for(var d=0; d<3; d++){
+      var idx = SESSIONS.findIndex(function(s){ return s.week===w.week && s.day===d+1; });
+      var done = isSessionDone(idx);
+      var isNext = (idx === nextSessionIndex()) && !done && progress.done.length < SESSIONS.length;
+      var s = SESSIONS[idx];
+      html += '<div class="day-row">'+
+        '<div class="day-dot '+(done?'done':(isNext?'next':''))+'"></div>'+
+        '<div class="day-text"><b>Day '+(d+1)+' · '+fmtMin(s.totalSec)+'</b><span>'+s.blurb+'</span></div>'+
+      '</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  views.plan.innerHTML = html;
+}
+
+/* ============ History view ============ */
+function renderHistory(){
+  if(progress.done.length === 0){
+    views.history.innerHTML = '<div class="card"><p class="empty-note">No sessions logged yet. Finish your first run to see it here.</p></div>';
+    return;
+  }
+  var rows = progress.done.slice().reverse().map(function(d){
+    var s = SESSIONS[d.idx];
+    var date = new Date(d.date);
+    var dateStr = date.toLocaleDateString(undefined, {month:'short', day:'numeric'});
+    return '<div class="hist-row">'+
+      '<div class="hist-left"><b>Week '+s.week+', Day '+s.day+'</b><span>'+dateStr+'</span></div>'+
+      '<div class="hist-right"><div class="dur mono">'+fmtClock(d.durationSec)+'</div><div class="feel">'+d.feeling+'</div></div>'+
+    '</div>';
+  }).join('');
+  views.history.innerHTML = '<div class="card">'+rows+'</div>';
+}
+
+/* ============ Init ============ */
+renderToday();
+</script>
+</body>
+</html>
